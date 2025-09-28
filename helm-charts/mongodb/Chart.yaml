@@ -1,0 +1,4 @@
+apiVersion: v2
+name: mongodb
+description: MongoDB StatefulSet
+version: 0.1.0

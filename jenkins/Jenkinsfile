@@ -1,0 +1,70 @@
+pipeline {
+  agent any
+  environment {
+    AWS_REGION = 'us-east-1'
+    // ECR_REPO and other secrets should be provided via Jenkins credentials
+  }
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+    stage('Install & Test') {
+      steps {
+        sh 'echo "Install deps and run tests for frontend/backend"'
+        // e.g. (adjust paths): cd sample-app/frontend; npm ci; npm test
+      }
+    }
+    stage('Build Docker Images') {
+      steps {
+        sh '''
+  echo "Building frontend image"
+  docker build -t ${env.ECR_FRONTEND_REPO}:$BUILD_NUMBER Application-Code/frontend
+  echo "Building backend image"
+  docker build -t ${env.ECR_BACKEND_REPO}:$BUILD_NUMBER Application-Code/backend
+        '''
+      }
+    }
+    stage('Scan Images (Trivy)') {
+      steps {
+        sh '''
+        echo "Scanning images with Trivy"
+        trivy image --severity HIGH,CRITICAL ${env.ECR_FRONTEND_REPO}:$BUILD_NUMBER || true
+        trivy image --severity HIGH,CRITICAL ${env.ECR_BACKEND_REPO}:$BUILD_NUMBER || true
+        '''
+      }
+    }
+    stage('Authenticate to ECR') {
+      steps {
+        withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+          sh '''
+          aws --version
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${env.ECR_REGISTRY}
+          '''
+        }
+      }
+    }
+    stage('Push to ECR') {
+      steps {
+        sh '''
+        docker push ${env.ECR_FRONTEND_REPO}:$BUILD_NUMBER
+        docker push ${env.ECR_BACKEND_REPO}:$BUILD_NUMBER
+        '''
+      }
+    }
+    stage('Update Manifests') {
+      steps {
+        sh '''
+        echo "Updating Helm values / k8s manifests with new image tags"
+        # Example using yq or sed to patch values.yaml
+        yq eval '.image.tag = "'"$BUILD_NUMBER"'" -i helm-charts/frontend/values.yaml
+        yq eval '.image.tag = "'"$BUILD_NUMBER"'" -i helm-charts/backend/values.yaml
+        git config user.email "ci@example.com"
+        git config user.name "ci-bot"
+        git add helm-charts/*/values.yaml
+        git commit -m "ci: bump images to $BUILD_NUMBER" || true
+        git push origin HEAD
+        '''
+      }
+    }
+  }
+}

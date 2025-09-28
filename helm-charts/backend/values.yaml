@@ -1,0 +1,9 @@
+replicaCount: 2
+image:
+  repository: "REPLACE_WITH_ECR_ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/demo-backend"
+  tag: latest
+service:
+  port: 3000
+env:
+  # Prefer ExternalSecrets or k8s Secret to inject MONGO_URI in production
+  MONGO_URI: "mongodb://mongo:27017/mydb"

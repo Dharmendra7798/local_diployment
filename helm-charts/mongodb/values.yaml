@@ -1,0 +1,10 @@
+replicaCount: 1
+image:
+  repository: mongo
+  tag: 6.0
+persistence:
+  enabled: true
+  storageClass: "gp2"
+  size: 10Gi
+service:
+  port: 27017

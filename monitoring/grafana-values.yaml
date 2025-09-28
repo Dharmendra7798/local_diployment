@@ -1,0 +1,12 @@
+grafana:
+  adminUser: admin
+  adminPassword: admin
+dashboards:
+  default:
+    sample-dashboard: |
+      {
+        "annotations": {"list": []},
+        "panels": [],
+        "title": "Sample",
+        "version": 1
+      }

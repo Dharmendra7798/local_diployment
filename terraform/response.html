@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sample MERN Frontend</title>
+</head>
+<body>
+  <h1>Sample MERN Frontend</h1>
+  <p id="status">Checking backend status...</p>
+  <script>
+    fetch('/api/health').then(r=>r.json()).then(j=>{
+      document.getElementById('status').innerText = 'Backend: ' + j.status;
+    }).catch(e=>{
+      document.getElementById('status').innerText = 'Backend unreachable';
+    });
+  </script>
+</body>
+</html>
