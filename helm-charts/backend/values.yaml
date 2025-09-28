@@ -1,6 +1,6 @@
 replicaCount: 2
 image:
-  repository: "REPLACE_WITH_ECR_ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/demo-backend"
+  repository: "REPLACE_WITH_ECR_ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/taskforge-backend"
   tag: latest
 service:
   port: 3000

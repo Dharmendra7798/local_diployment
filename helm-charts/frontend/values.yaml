@@ -1,7 +1,6 @@
 replicaCount: 2
 image:
-  # Replace these with your ECR repository URLs (or let CI update image tags)
-  repository: "REPLACE_WITH_ECR_ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/demo-frontend"
+  repository: "REPLACE_WITH_ECR_ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com/taskforge-frontend"
   tag: "latest"
 service:
   type: ClusterIP

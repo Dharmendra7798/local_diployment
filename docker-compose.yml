@@ -23,7 +23,7 @@ services:
 
   frontend:
     build: ./Application-Code/frontend
-    container_name: demo_frontend
+    container_name: taskforge_frontend
     restart: unless-stopped
     environment:
       - REACT_APP_BACKEND_URL=http://backend:3500/api/tasks

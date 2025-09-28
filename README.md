@@ -1,6 +1,6 @@
-# End-to-End Kubernetes Three-Tier DevSecOps MERN Stack Project
+# TaskForge — End-to-End MERN DevSecOps Scaffold
 
-This workspace is a scaffold for an end-to-end, production-oriented MERN (React, Node, MongoDB) three-tier application deployed to AWS EKS with a full DevSecOps pipeline.
+TaskForge is a scaffold for an end-to-end, production-oriented MERN (React, Node, MongoDB) three-tier application deployed to AWS EKS with a full DevSecOps pipeline.
 
 Included in this scaffold:
 
